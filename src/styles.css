@@ -1696,6 +1696,13 @@ kbd {
   font-size: clamp(30px, 8vw, 46px);
 }
 
+/* Arabic marks (shadda, dagger alif, harakat) extend beyond the line box; padding keeps
+   them inside both layers so the clip-path fill reaches them. */
+.ink-ghost,
+.ink-filled {
+  padding: 0.45em 0.2em 0.3em;
+}
+
 .ink-ghost {
   color: transparent;
   -webkit-text-stroke: 1px #c9bca3;

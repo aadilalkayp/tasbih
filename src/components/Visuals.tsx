@@ -329,7 +329,7 @@ function Ink({ count, target, status, dhikr }: VisualProps) {
     <div className="visual ink-v">
       <div className={`ink-text ink-${size}`} lang={dhikr.arabic ? 'ar' : undefined} dir={dhikr.arabic ? 'rtl' : undefined}>
         <div className="ink-ghost">{text}</div>
-        <div className="ink-filled" style={{ clipPath: `inset(${(1 - progress) * 100}% 0 0 0)` }}>
+        <div className="ink-filled" style={{ clipPath: progress >= 1 ? 'none' : `inset(${(1 - progress) * 100}% 0 0 0)` }}>
           {text}
         </div>
       </div>
