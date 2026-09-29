@@ -19,11 +19,13 @@ npm install
 npm run dev
 ```
 
-## Deploy (Cloudflare Workers static assets)
+## Deploy
 
-```sh
-npx wrangler login   # once
-npm run deploy       # builds to dist/ and deploys; attaches tasbih.alkp.dev as a custom domain
-```
+Every push to `main` is built and deployed by GitHub Actions ([.github/workflows/deploy.yml](.github/workflows/deploy.yml))
+to Cloudflare Workers static assets, with `tasbih.alkp.dev` attached as a custom domain (see `wrangler.jsonc`).
+Pull requests only run the build.
 
-The `alkp.dev` zone must be on the same Cloudflare account. Config lives in `wrangler.jsonc`.
+Required repository secrets:
+
+- `CLOUDFLARE_API_TOKEN` — created from the **Edit Cloudflare Workers** token template, with zone resources including `alkp.dev`.
+- `CLOUDFLARE_ACCOUNT_ID` — shown on the Cloudflare dashboard (Workers & Pages overview, right sidebar).
