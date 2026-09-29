@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Tasbih — Online Dhikr Counter with Sound &amp; Haptics</title>
+    <meta name="description" content="A calm, ad-free online tasbih (dhikr counter). Tap or press Space to count, with click sounds, haptic feedback, custom targets, sequences like Tasbih Fatimah, and daily progress — saved in your browser." />
+    <link rel="canonical" href="https://tasbih.alkp.dev/" />
+    <meta name="theme-color" content="#f5f2eb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#101412" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="light dark" />
+
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Tasbih" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tasbih.alkp.dev/" />
+    <meta property="og:title" content="Tasbih — Online Dhikr Counter" />
+    <meta property="og:description" content="Ad-free tasbih counter with sound, haptics, targets and sequences." />
+    <meta property="og:image" content="https://tasbih.alkp.dev/icon-512.png" />
+    <meta name="twitter:card" content="summary" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Tasbih",
+        "url": "https://tasbih.alkp.dev/",
+        "applicationCategory": "LifestyleApplication",
+        "operatingSystem": "Any",
+        "description": "Ad-free online tasbih / dhikr counter with sound, haptic feedback, custom targets and sequences.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      <main style="font-family: system-ui; padding: 2rem; max-width: 36rem; margin: auto">
+        <h1>Tasbih — online dhikr counter</h1>
+        <p>This counter needs JavaScript. Enable it to count your dhikr with sound and haptics.</p>
+      </main>
+    </noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

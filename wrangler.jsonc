@@ -1,0 +1,11 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "tasbih",
+  "compatibility_date": "2025-09-01",
+  // Static site only: no Worker script, Cloudflare serves ./dist directly.
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  },
+  "routes": [{ "pattern": "tasbih.alkp.dev", "custom_domain": true }]
+}
