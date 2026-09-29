@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { CLICK_SOUNDS, DONE_SOUNDS, hapticsSupported, previewClick, previewDone } from '../lib/feedback'
 import { dayKey, sanitize } from '../lib/store'
+import { THEMES } from '../lib/themes'
 import type { Settings, State } from '../lib/types'
 import { Modal } from './Modal'
 
@@ -48,6 +49,29 @@ export function SettingsDialog({ state, onSettings, onReplace, onResetAll, onClo
     <Modal title="Settings" onClose={onClose}>
       {() => (
         <div className="form">
+          <div className="field">
+            <span>Appearance</span>
+            <div className="themes" role="radiogroup" aria-label="Theme">
+              {THEMES.map((t) => (
+                <button
+                  type="button"
+                  key={t.id}
+                  role="radio"
+                  aria-checked={s.theme === t.id}
+                  className="theme-tile"
+                  data-t={t.id}
+                  onClick={() => onSettings({ theme: t.id })}
+                  title={t.desc}
+                >
+                  <span className="theme-swatch" aria-hidden="true">
+                    <ThemeEmblem id={t.id} />
+                  </span>
+                  <span className="theme-name">{t.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
           <Toggle
             label="Sound"
             desc="A sound on every count and a distinct one when you reach the target. Tap to preview."
@@ -192,4 +216,59 @@ function Toggle({
       {children}
     </div>
   )
+}
+
+function ThemeEmblem({ id }: { id: string }) {
+  switch (id) {
+    case 'misbaha':
+      return (
+        <svg viewBox="0 0 40 40">
+          {Array.from({ length: 11 }, (_, i) => {
+            const a = ((100 + i * 31) * Math.PI) / 180
+            return <circle key={i} cx={20 + 13 * Math.cos(a)} cy={19 + 13 * Math.sin(a)} r="2.6" fill={i < 6 ? '#1e6b58' : '#cdb893'} />
+          })}
+          <ellipse cx="20" cy="34" rx="2.4" ry="3.4" fill="#1e6b58" />
+        </svg>
+      )
+    case 'geometric':
+      return (
+        <svg viewBox="0 0 40 40" fill="none" stroke="#e7cf8f" strokeWidth="1.5">
+          <rect x="11" y="11" width="18" height="18" />
+          <rect x="11" y="11" width="18" height="18" transform="rotate(45 20 20)" />
+        </svg>
+      )
+    case 'night':
+      return (
+        <svg viewBox="0 0 40 40">
+          <path d="M27 8a9 9 0 1 0 6 13 7 7 0 1 1-6-13Z" fill="#f4e7c0" />
+          <path d="M6 32 L12 26 L17 28 L21 21" stroke="#c8cdff" strokeWidth=".8" fill="none" />
+          {[[6, 32], [12, 26], [17, 28], [21, 21]].map(([x, y], i) => (
+            <circle key={i} cx={x} cy={y} r="1.4" fill="#fff" />
+          ))}
+        </svg>
+      )
+    case 'water':
+      return (
+        <svg viewBox="0 0 40 40" fill="none">
+          <path d="M0 26 Q5 23 10 26 T20 26 T30 26 T40 26 V40 H0Z" fill="#7fb8b5" />
+          <circle cx="20" cy="15" r="4" stroke="#2f7d7d" strokeWidth="1" />
+          <circle cx="20" cy="15" r="8" stroke="#2f7d7d" strokeWidth=".8" opacity=".5" />
+        </svg>
+      )
+    case 'ink':
+      return (
+        <svg viewBox="0 0 40 40">
+          <text x="20" y="28" textAnchor="middle" fontFamily="Amiri, serif" fontSize="24" fontWeight="700" fill="#1b1a17">
+            ع
+          </text>
+        </svg>
+      )
+    default:
+      return (
+        <svg viewBox="0 0 40 40" fill="none" strokeWidth="2.5">
+          <circle cx="20" cy="20" r="12" stroke="#d9d2c4" />
+          <path d="M20 8a12 12 0 0 1 11.4 15.7" stroke="#1e6b58" strokeLinecap="round" />
+        </svg>
+      )
+  }
 }

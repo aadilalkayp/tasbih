@@ -193,6 +193,13 @@ kbd {
   touch-action: manipulation;
   outline: none;
   min-height: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.tap > :not(.water-layer) {
+  position: relative;
+  z-index: 1;
 }
 
 .dhikr-head {
@@ -231,7 +238,7 @@ kbd {
   margin-top: 2px;
 }
 
-.ring-wrap {
+.visual {
   position: relative;
   width: min(72vw, 42vh, 340px);
   aspect-ratio: 1;
@@ -284,7 +291,7 @@ kbd {
   animation: halo 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.ring-center {
+.visual-center {
   position: absolute;
   inset: 0;
   display: flex;
@@ -977,7 +984,7 @@ kbd {
     display: none;
   }
 
-  .ring-wrap {
+  .visual {
     width: min(76vw, 40vh, 340px);
   }
 }
@@ -1122,5 +1129,632 @@ kbd {
   *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* =====================================================================
+   Themes. Each one overrides the colour tokens (so panel & dialogs follow)
+   and styles its own counter visual.
+   ===================================================================== */
+
+.round,
+.latin {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* ---------- theme picker ---------- */
+
+.themes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.theme-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 6px 8px;
+  border-radius: 12px;
+  border: 1.5px solid var(--line);
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.theme-tile:hover {
+  background: var(--surface-2);
+}
+
+.theme-tile[aria-checked='true'] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.theme-swatch {
+  width: 100%;
+  height: 52px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  background: #f5f2eb;
+  overflow: hidden;
+}
+
+.theme-swatch svg {
+  width: 40px;
+  height: 40px;
+}
+
+.theme-tile[data-t='misbaha'] .theme-swatch {
+  background: radial-gradient(120% 100% at 50% 0%, #fbf7ee, #eadfc8);
+}
+.theme-tile[data-t='geometric'] .theme-swatch {
+  background: #0f3b33;
+}
+.theme-tile[data-t='night'] .theme-swatch {
+  background: radial-gradient(130% 100% at 80% 0%, #1d2b52, #05070f);
+}
+.theme-tile[data-t='water'] .theme-swatch {
+  background: linear-gradient(#f6f3ec 55%, #8fc3c0);
+}
+.theme-tile[data-t='ink'] .theme-swatch {
+  background: #f7f2e7 radial-gradient(#00000010 1px, transparent 1px) 0 0 / 4px 4px;
+}
+
+.theme-name {
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+/* ---------- Misbaha ---------- */
+
+:root[data-theme='misbaha'] {
+  --bg: #f3ebdc;
+  --surface: #fbf7ee;
+  --surface-2: #efe5d1;
+  --text: #2b261d;
+  --muted: #86785f;
+  --line: #e2d5bc;
+  --accent: #1e6b58;
+  --accent-ink: #fff;
+  --accent-soft: #dde9dc;
+  --gold: #a6771f;
+  --gold-soft: #f1e2bf;
+  --track: #e3d6bd;
+  --danger: #b0412c;
+  color-scheme: light;
+}
+
+:root[data-theme='misbaha'] body {
+  background: radial-gradient(120% 90% at 50% 0%, #fbf7ee 0%, #eee3cd 100%) fixed;
+}
+
+.beads-v svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.beads-v .bead {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.tap[data-done] .beads-v svg {
+  filter: drop-shadow(0 0 14px rgb(214 165 70 / 0.45));
+}
+
+.beads-v .visual-center {
+  padding-top: 8%;
+}
+
+.beads-v .count,
+.night-v .count,
+.water-v .count,
+.ink-v .count {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-variant-numeric: lining-nums tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.beads-v .count {
+  font-weight: 300;
+  font-size: clamp(56px, min(16vw, 10vh), 84px);
+}
+
+.beads-v .of {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* ---------- Geometric ---------- */
+
+:root[data-theme='geometric'] {
+  --bg: #0f3b33;
+  --surface: #12443b;
+  --surface-2: #1a5247;
+  --text: #f3e9cf;
+  --muted: #a9bba5;
+  --line: #235a4e;
+  --accent: #e7cf8f;
+  --accent-ink: #0f3b33;
+  --accent-soft: #245847;
+  --gold: #e7cf8f;
+  --gold-soft: #33533d;
+  --track: #2a5c50;
+  --danger: #f2a58f;
+  color-scheme: dark;
+}
+
+:root[data-theme='geometric'] body {
+  background-color: #0f3b33;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%23d8b565' stroke-opacity='.10' stroke-width='1'%3E%3Crect x='16' y='16' width='24' height='24'/%3E%3Crect x='16' y='16' width='24' height='24' transform='rotate(45 28 28)'/%3E%3Cpath d='M0 0L16 16M56 0L40 16M0 56L16 40M56 56L40 40'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+:root[data-theme='geometric'] .arabic {
+  color: #e7cf8f;
+}
+
+.star-v svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.star-track {
+  fill: none;
+  stroke: rgb(231 207 143 / 0.18);
+  stroke-width: 1.5;
+}
+
+.star-prog {
+  fill: none;
+  stroke: #e7cf8f;
+  stroke-width: 3;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.star-inner {
+  fill: none;
+  stroke: rgb(231 207 143 / 0.25);
+  stroke-width: 1;
+  transform-origin: 145px 145px;
+  transition: transform 1.4s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.6s;
+}
+
+.star-circle {
+  fill: none;
+  stroke: rgb(231 207 143 / 0.22);
+}
+
+.star-fill {
+  fill: #e7cf8f;
+  opacity: 0;
+  transition: opacity 0.8s;
+}
+
+.tap[data-done] .star-fill {
+  opacity: 0.12;
+}
+
+.tap[data-done] .star-inner {
+  transform: rotate(45deg);
+  stroke: #e7cf8f;
+}
+
+.star-v .count {
+  font-family: var(--arabic);
+  font-size: clamp(56px, min(17vw, 10vh), 84px);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: 0;
+}
+
+.star-v .latin {
+  margin-top: 0;
+}
+
+.star-v .of {
+  margin-top: 2px;
+  font-size: 12px;
+}
+
+.tap:not([data-done]) .star-v .of {
+  display: none;
+}
+
+/* ---------- Night sky ---------- */
+
+:root[data-theme='night'] {
+  --bg: #0b1024;
+  --surface: #11172f;
+  --surface-2: #1a2142;
+  --text: #e9e6ff;
+  --muted: #8f94b8;
+  --line: #242b50;
+  --accent: #b9c1ff;
+  --accent-ink: #0b1024;
+  --accent-soft: #232b58;
+  --gold: #ffe6a3;
+  --gold-soft: #3a3420;
+  --track: #242b50;
+  --danger: #ff9b8a;
+  color-scheme: dark;
+}
+
+:root[data-theme='night'] body {
+  background: radial-gradient(130% 90% at 70% 0%, #1d2b52 0%, #0b1024 55%, #05070f 100%) fixed;
+}
+
+:root[data-theme='night'] .panel {
+  background: rgb(17 23 47 / 0.85);
+  backdrop-filter: blur(12px);
+}
+
+:root[data-theme='night'] .arabic {
+  color: #d9d4ff;
+}
+
+.night-dust {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  fill: #fff;
+  pointer-events: none;
+}
+
+.night-v {
+  width: min(86vw, 50vh, 440px);
+}
+
+.night-v svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.moon {
+  fill: #f4e7c0;
+}
+
+.moon-glow {
+  fill: #ffe6a3;
+  opacity: 0;
+  transition: opacity 1.2s;
+}
+
+.tap[data-done] .moon-glow {
+  opacity: 0.55;
+}
+
+.constellation {
+  fill: none;
+  stroke: rgb(200 205 255 / 0.35);
+  stroke-width: 0.8;
+}
+
+.night-star {
+  fill: #fff;
+  opacity: 0.18;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 0.4s;
+}
+
+.night-star.on {
+  opacity: 1;
+  filter: url(#starGlow);
+}
+
+.tap[data-done] .night-star.on {
+  fill: #ffe6a3;
+}
+
+.night-count {
+  position: absolute;
+  right: 2%;
+  bottom: 4%;
+  text-align: right;
+}
+
+.night-v .count {
+  font-weight: 300;
+  font-size: clamp(40px, min(12vw, 7vh), 60px);
+  line-height: 1;
+}
+
+.night-v .count small {
+  font-size: 0.36em;
+  color: var(--muted);
+  letter-spacing: 0;
+}
+
+.night-v .of {
+  margin-top: 4px;
+}
+
+.shooting-star {
+  position: absolute;
+  top: 6%;
+  left: -40%;
+  width: 90px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, #fff);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tap[data-flash='complete'] .shooting-star {
+  animation: shoot 1.4s ease-out 0.15s;
+}
+
+@keyframes shoot {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(18deg);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(170%, 60%) rotate(18deg) translateX(300px);
+  }
+}
+
+/* ---------- Still water ---------- */
+
+:root[data-theme='water'] {
+  --bg: #f4f1ea;
+  --surface: #fbfaf6;
+  --surface-2: #e8efec;
+  --text: #173f44;
+  --muted: #5d7b7d;
+  --line: #d9e3df;
+  --accent: #2f7d7d;
+  --accent-ink: #fff;
+  --accent-soft: #d4e8e5;
+  --gold: #a87a26;
+  --gold-soft: #f2e5c6;
+  --track: #d9e3df;
+  --danger: #b0412c;
+  color-scheme: light;
+}
+
+:root[data-theme='water'] body {
+  background: linear-gradient(#f6f3ec, #ece6d8) fixed;
+}
+
+/* The tide fills the whole stage, not just the tap area. */
+:root[data-theme='water'] .stage {
+  position: relative;
+  overflow: hidden;
+}
+
+:root[data-theme='water'] .tap {
+  position: static;
+}
+
+:root[data-theme='water'] :is(.topbar, .controls) {
+  position: relative;
+  z-index: 1;
+}
+
+.water-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.water-fill {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(#8fc3c0cc, #3f8f8fe6);
+  transition: height 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.8s;
+}
+
+.water-fill .wave {
+  position: absolute;
+  left: 0;
+  top: -18px;
+  width: 200%;
+  height: 20px;
+  fill: #8fc3c0cc;
+  animation: drift 6s linear infinite;
+}
+
+.water-fill .wave.b {
+  top: -14px;
+  opacity: 0.5;
+  animation-duration: 9s;
+  animation-direction: reverse;
+}
+
+.tap[data-done] .water-fill {
+  background: linear-gradient(#e8cf8fcc, #c79a3ee6);
+}
+
+.tap[data-done] .water-fill .wave {
+  fill: #e8cf8fcc;
+}
+
+.ripple {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border-radius: 50%;
+  border: 1.5px solid #2f7d7d;
+  animation: ripple 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.water-v .visual-center {
+  mix-blend-mode: multiply;
+}
+
+.water-v .count {
+  font-weight: 300;
+  font-size: clamp(80px, min(24vw, 14vh), 124px);
+  color: #173f44;
+}
+
+.water-v .of {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #3d6c70;
+}
+
+:root[data-theme='water'] .arabic {
+  color: #2c5c61;
+}
+
+@keyframes drift {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes ripple {
+  from {
+    transform: scale(0.2);
+    opacity: 0.9;
+  }
+  to {
+    transform: scale(9);
+    opacity: 0;
+  }
+}
+
+/* ---------- Ink ---------- */
+
+:root[data-theme='ink'] {
+  --bg: #f7f2e7;
+  --surface: #fdfaf2;
+  --surface-2: #efe8d8;
+  --text: #1b1a17;
+  --muted: #857a66;
+  --line: #e2d8c3;
+  --accent: #1b1a17;
+  --accent-ink: #f7f2e7;
+  --accent-soft: #e8e0cc;
+  --gold: #a6771f;
+  --gold-soft: #f1e2bf;
+  --track: #e2d8c3;
+  --danger: #b0412c;
+  color-scheme: light;
+}
+
+:root[data-theme='ink'] body {
+  background: #f7f2e7 radial-gradient(#00000008 1px, transparent 1px) 0 0 / 4px 4px;
+}
+
+/* The calligraphy is the visual here, so the heading drops its own Arabic line. */
+:root[data-theme='ink'] .dhikr-head .arabic {
+  display: none;
+}
+
+.ink-v {
+  aspect-ratio: auto;
+  width: min(92vw, 560px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  min-height: min(42vh, 340px);
+}
+
+.ink-text {
+  position: relative;
+  font-family: var(--arabic);
+  font-weight: 700;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.ink-l {
+  font-size: clamp(48px, 14vw, 84px);
+}
+.ink-m {
+  font-size: clamp(38px, 10vw, 62px);
+}
+.ink-s {
+  font-size: clamp(30px, 8vw, 46px);
+}
+
+.ink-ghost {
+  color: transparent;
+  -webkit-text-stroke: 1px #c9bca3;
+}
+
+.ink-filled {
+  position: absolute;
+  inset: 0;
+  color: #1b1a17;
+  transition: clip-path 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.tap[data-done] .ink-filled {
+  background: linear-gradient(100deg, #8a5d12 20%, #f0c96b 45%, #8a5d12 70%) 0 0 / 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 2.2s ease-in-out infinite;
+}
+
+.ink-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ink-v .count {
+  font-size: clamp(36px, 10vw, 48px);
+  font-weight: 400;
+  line-height: 1;
+  color: #3a352b;
+}
+
+.ink-v .of {
+  margin-top: 4px;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.brush {
+  width: 160px;
+  height: 2px;
+  margin-top: 10px;
+  border-radius: 2px;
+  background: #1b1a17;
+  transform-origin: left;
+  transition: transform 0.45s;
+}
+
+.tap[data-done] .brush {
+  background: #b8862f;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -150% 0;
   }
 }

@@ -17,12 +17,14 @@ export type Sequence = {
 export type Active = { kind: 'dhikr'; id: string } | { kind: 'sequence'; id: string }
 
 export type ClickSound = 'bead' | 'wood' | 'pop' | 'beep' | 'crystal'
+export type Theme = 'minimal' | 'misbaha' | 'geometric' | 'night' | 'water' | 'ink'
 export type DoneSound = 'bell' | 'gong' | 'chord' | 'beeps'
 
 export type Settings = {
   sound: boolean
   clickSound: ClickSound
   doneSound: DoneSound
+  theme: Theme
   haptics: boolean
   /** Ignore mouse / trackpad clicks on the counter; keyboard and touch still count. */
   ignorePointer: boolean

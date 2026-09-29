@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { View } from '../lib/store'
 import type { State } from '../lib/types'
 import { IconReset, IconUndo } from './Icons'
+import { Visual } from './Visuals'
 
 type Props = {
   view: View
@@ -13,25 +14,24 @@ type Props = {
   pointerHint: boolean
 }
 
-const R = 92
-const CIRC = 2 * Math.PI * R
 const finePointer = typeof matchMedia !== 'undefined' && matchMedia('(hover: hover) and (pointer: fine)').matches
 
 export function Counter({ view, state, flash, onPointerCount, onUndo, onReset, pointerHint }: Props) {
   const { dhikr, count, target, seq, stepIndex } = view
-  const countRef = useRef<HTMLDivElement>(null)
+  const tapRef = useRef<HTMLDivElement>(null)
+  const lastTap = useRef<{ x: number; y: number; t: number } | null>(null)
   const prev = useRef(count)
   const [confirmReset, setConfirmReset] = useState(false)
 
   const isLastStep = !seq || stepIndex === seq.steps.length - 1
   const done = count >= target
   const allDone = done && isLastStep
-  const progress = Math.min(count / target, 1)
 
   // Small "bump" on every count.
   useEffect(() => {
-    if (count > prev.current && countRef.current && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      countRef.current.animate([{ transform: 'scale(1.06)' }, { transform: 'scale(1)' }], {
+    const el = tapRef.current?.querySelector('.count')
+    if (count > prev.current && el && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      el.animate([{ transform: 'scale(1.06)' }, { transform: 'scale(1)' }], {
         duration: 140,
         easing: 'cubic-bezier(.2,.8,.2,1)',
       })
@@ -58,7 +58,13 @@ export function Counter({ view, state, flash, onPointerCount, onUndo, onReset, p
         role="button"
         tabIndex={-1}
         aria-label={`Count ${dhikr.name}. ${count} of ${target}.`}
-        onPointerDown={onPointerCount}
+        ref={tapRef}
+        onPointerDown={(e) => {
+          // Relative to the whole stage, which is what full-bleed theme layers (water) cover.
+          const box = (e.currentTarget.closest('.stage') ?? e.currentTarget).getBoundingClientRect()
+          lastTap.current = { x: e.clientX - box.left, y: e.clientY - box.top, t: performance.now() }
+          onPointerCount(e)
+        }}
         data-done={allDone || undefined}
         data-flash={flash ?? undefined}
       >
@@ -77,26 +83,15 @@ export function Counter({ view, state, flash, onPointerCount, onUndo, onReset, p
           {dhikr.meaning && <div className="dhikr-meaning">{dhikr.meaning}</div>}
         </div>
 
-        <div className="ring-wrap">
-          <svg className="ring" viewBox="0 0 200 200" aria-hidden="true">
-            <circle className="ring-track" cx="100" cy="100" r={R} />
-            <circle
-              className="ring-bar"
-              cx="100"
-              cy="100"
-              r={R}
-              strokeDasharray={CIRC}
-              strokeDashoffset={CIRC * (1 - progress)}
-              transform="rotate(-90 100 100)"
-            />
-          </svg>
-          <div className="ring-center">
-            <div className="count" ref={countRef} aria-live="off">
-              {count.toLocaleString()}
-            </div>
-            <div className="of">{status}</div>
-          </div>
-        </div>
+        <Visual
+          theme={state.settings.theme}
+          count={count}
+          target={target}
+          done={allDone}
+          status={status}
+          dhikr={dhikr}
+          lastTap={lastTap}
+        />
 
         {seq && (
           <div className="steps" aria-hidden="true">

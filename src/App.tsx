@@ -5,8 +5,10 @@ import { EditSequence } from './components/EditSequence'
 import { IconEye, IconEyeOff, IconList, IconMute, IconSettings, IconSound } from './components/Icons'
 import { Panel } from './components/Panel'
 import { SettingsDialog } from './components/SettingsDialog'
+import { NightDust } from './components/Visuals'
 import { feedback, keepAwake } from './lib/feedback'
 import * as store from './lib/store'
+import { THEMES } from './lib/themes'
 import type { Active, Dhikr, Sequence, Settings, State } from './lib/types'
 
 type Dialog = { kind: 'dhikr'; dhikr: Dhikr | null } | { kind: 'sequence'; sequence: Sequence | null } | { kind: 'settings' } | null
@@ -112,6 +114,17 @@ export default function App() {
     return () => document.removeEventListener('visibilitychange', onVis)
   }, [])
 
+  // Themes restyle the whole page (tokens live on :root) and the mobile status bar.
+  const theme = state.settings.theme
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    const color = THEMES.find((t) => t.id === theme)?.color
+    document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]').forEach((m) => {
+      m.dataset.default ??= m.content
+      m.content = color ?? m.dataset.default
+    })
+  }, [theme])
+
   const select = (a: Active) => {
     update((s) => ({ ...s, active: a }))
     setPanelOpen(false)
@@ -124,6 +137,7 @@ export default function App() {
 
   return (
     <div className="app" data-focus={focus || undefined}>
+      {theme === 'night' && <NightDust />}
       <main className="stage">
         <header className="topbar">
           <div className="brand">
