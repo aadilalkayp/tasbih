@@ -1,15 +1,23 @@
 import { PRESET_DHIKRS, PRESET_SEQUENCES } from './presets'
-import type { Dhikr, FeedbackEvent, Sequence, Settings, State } from './types'
+import type { ClickSound, Dhikr, DoneSound, FeedbackEvent, Sequence, Settings, State } from './types'
 
 const KEY = 'tasbih:v1'
 const LOG_DAYS_KEPT = 400
 
 export const DEFAULT_SETTINGS: Settings = {
   sound: true,
+  clickSound: 'bead',
+  doneSound: 'bell',
   haptics: true,
   ignorePointer: false,
   cooldownMs: 120,
+  focus: false,
 }
+
+const CLICK_SOUNDS: ClickSound[] = ['bead', 'wood', 'pop', 'beep', 'crystal']
+const DONE_SOUNDS: DoneSound[] = ['bell', 'gong', 'chord', 'beeps']
+const oneOf = <T extends string>(v: unknown, options: T[], fallback: T): T =>
+  options.includes(v as T) ? (v as T) : fallback
 
 export function defaultState(): State {
   return {
@@ -100,9 +108,12 @@ export function sanitize(raw: unknown): State {
   const s = isObj(raw.settings) ? raw.settings : {}
   const settings: Settings = {
     sound: typeof s.sound === 'boolean' ? s.sound : DEFAULT_SETTINGS.sound,
+    clickSound: oneOf(s.clickSound, CLICK_SOUNDS, DEFAULT_SETTINGS.clickSound),
+    doneSound: oneOf(s.doneSound, DONE_SOUNDS, DEFAULT_SETTINGS.doneSound),
     haptics: typeof s.haptics === 'boolean' ? s.haptics : DEFAULT_SETTINGS.haptics,
     ignorePointer: typeof s.ignorePointer === 'boolean' ? s.ignorePointer : DEFAULT_SETTINGS.ignorePointer,
     cooldownMs: Math.min(1000, posInt(s.cooldownMs, DEFAULT_SETTINGS.cooldownMs)),
+    focus: typeof s.focus === 'boolean' ? s.focus : DEFAULT_SETTINGS.focus,
   }
 
   return { version: 1, dhikrs, sequences, counts: numMap(raw.counts), seqProgress, active, settings, log }

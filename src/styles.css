@@ -832,6 +832,17 @@ kbd {
   align-self: flex-start;
 }
 
+.sound-pick {
+  display: flex;
+  flex-direction: column;
+  margin-top: 6px;
+}
+
+.sound-pick-label {
+  font-size: 12px;
+  color: var(--muted);
+}
+
 .toggle-row {
   display: flex;
   flex-direction: column;
@@ -975,6 +986,98 @@ kbd {
   .dhikr-meaning,
   .steps {
     display: none;
+  }
+}
+
+/* ---------- focus mode: everything retreats to its edge, only the counter stays ---------- */
+
+.app {
+  transition: grid-template-columns 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  overflow: hidden;
+}
+
+.brand,
+.topbar-actions > .icon-btn:not(.focus-toggle),
+.controls > *,
+.dhikr-meaning,
+.steps {
+  transition:
+    transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity 0.3s ease,
+    visibility 0s;
+}
+
+.app[data-focus] :is(.brand, .topbar-actions > .icon-btn:not(.focus-toggle), .controls > *, .dhikr-meaning, .steps) {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity 0.3s ease,
+    visibility 0s linear 0.45s;
+}
+
+.app[data-focus] .brand,
+.app[data-focus] .controls > :first-child {
+  transform: translateX(-28px);
+}
+
+.app[data-focus] .topbar-actions > .icon-btn:not(.focus-toggle),
+.app[data-focus] .controls > :last-child {
+  transform: translateX(28px);
+}
+
+.app[data-focus] .topbar-actions > .icon-btn:nth-child(2) {
+  transition-delay: 0.03s;
+}
+
+.app[data-focus] .topbar-actions > .icon-btn:nth-child(1) {
+  transition-delay: 0.06s;
+}
+
+.app[data-focus] .controls > .hint {
+  transform: translateY(16px);
+}
+
+.app[data-focus] .dhikr-meaning,
+.app[data-focus] .steps {
+  transform: scale(0.96);
+}
+
+.focus-toggle {
+  transition: opacity 0.3s, background-color 0.15s, color 0.15s;
+}
+
+.app[data-focus] .focus-toggle {
+  opacity: 0.45;
+}
+
+.app[data-focus] .focus-toggle:hover,
+.app[data-focus] .focus-toggle:focus-visible {
+  opacity: 1;
+}
+
+@media (min-width: 861px) {
+  .panel {
+    width: var(--panel-w);
+    transition:
+      transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+      opacity 0.35s ease,
+      visibility 0s;
+  }
+
+  .app[data-focus] {
+    grid-template-columns: 1fr 0px;
+  }
+
+  .app[data-focus] .panel {
+    transform: translateX(48px);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+      opacity 0.35s ease,
+      visibility 0s linear 0.5s;
   }
 }
 

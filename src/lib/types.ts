@@ -16,13 +16,20 @@ export type Sequence = {
 
 export type Active = { kind: 'dhikr'; id: string } | { kind: 'sequence'; id: string }
 
+export type ClickSound = 'bead' | 'wood' | 'pop' | 'beep' | 'crystal'
+export type DoneSound = 'bell' | 'gong' | 'chord' | 'beeps'
+
 export type Settings = {
   sound: boolean
+  clickSound: ClickSound
+  doneSound: DoneSound
   haptics: boolean
   /** Ignore mouse / trackpad clicks on the counter; keyboard and touch still count. */
   ignorePointer: boolean
   /** Counts arriving faster than this after the previous one are dropped. */
   cooldownMs: number
+  /** Hide everything except the counter. */
+  focus: boolean
 }
 
 export type State = {

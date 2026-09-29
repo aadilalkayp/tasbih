@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { hapticsSupported, preview } from '../lib/feedback'
+import { CLICK_SOUNDS, DONE_SOUNDS, hapticsSupported, previewClick, previewDone } from '../lib/feedback'
 import { dayKey, sanitize } from '../lib/store'
 import type { Settings, State } from '../lib/types'
 import { Modal } from './Modal'
@@ -50,20 +50,49 @@ export function SettingsDialog({ state, onSettings, onReplace, onResetAll, onClo
         <div className="form">
           <Toggle
             label="Sound"
-            desc="A soft click on every count and a chime when you reach the target."
+            desc="A sound on every count and a distinct one when you reach the target. Tap to preview."
             checked={s.sound}
             onChange={(v) => onSettings({ sound: v })}
           >
-            <div className="chips">
-              <button type="button" className="chip" onClick={() => preview('tick')}>
-                ▶ Click
-              </button>
-              <button type="button" className="chip" onClick={() => preview('step')}>
-                ▶ Next step
-              </button>
-              <button type="button" className="chip" onClick={() => preview('complete')}>
-                ▶ Complete
-              </button>
+            <div className="sound-pick" role="radiogroup" aria-label="Count sound">
+              <span className="sound-pick-label">Count</span>
+              <div className="chips">
+                {CLICK_SOUNDS.map((c) => (
+                  <button
+                    type="button"
+                    key={c.id}
+                    role="radio"
+                    aria-checked={s.clickSound === c.id}
+                    className={`chip ${s.clickSound === c.id ? 'on' : ''}`}
+                    onClick={() => {
+                      onSettings({ clickSound: c.id })
+                      previewClick(c.id)
+                    }}
+                  >
+                    {c.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="sound-pick" role="radiogroup" aria-label="Target reached sound">
+              <span className="sound-pick-label">On target</span>
+              <div className="chips">
+                {DONE_SOUNDS.map((c) => (
+                  <button
+                    type="button"
+                    key={c.id}
+                    role="radio"
+                    aria-checked={s.doneSound === c.id}
+                    className={`chip ${s.doneSound === c.id ? 'on' : ''}`}
+                    onClick={() => {
+                      onSettings({ doneSound: c.id })
+                      previewDone(c.id)
+                    }}
+                  >
+                    {c.label}
+                  </button>
+                ))}
+              </div>
             </div>
           </Toggle>
 

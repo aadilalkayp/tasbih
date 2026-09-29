@@ -2,8 +2,9 @@
 
 A calm, ad-free online dhikr counter — **https://tasbih.alkp.dev**
 
-- Tap anywhere or press **Space** / **Enter** to count; **Backspace** / **-** / **Z** to undo; **M** to mute.
-- Soft click sound per count, a distinct chime + long haptic pattern when the target is reached.
+- Tap anywhere or press **Space** / **Enter** to count; **Backspace** / **-** / **Z** to undo; **M** to mute; **F** for focus mode (**Esc** to leave).
+- Selectable count sound (bead, wood, pop, beep, crystal) and target sound (bell, gong, chord, alarm), plus a long haptic pattern on completion.
+- Focus mode (eye button): everything slides to its edge and only the counter remains.
 - Custom dhikrs with targets, and sequences (e.g. 33 · 33 · 34 after salah) that auto-advance.
 - Guards against accidental counts: optional "ignore mouse & trackpad clicks" and a double-count cooldown.
 - Daily totals, 7-day history and streak. Everything is stored in `localStorage`; export/import a JSON backup in Settings.

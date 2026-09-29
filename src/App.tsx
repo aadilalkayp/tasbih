@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Counter } from './components/Counter'
 import { EditDhikr } from './components/EditDhikr'
 import { EditSequence } from './components/EditSequence'
-import { IconList, IconMute, IconSettings, IconSound } from './components/Icons'
+import { IconEye, IconEyeOff, IconList, IconMute, IconSettings, IconSound } from './components/Icons'
 import { Panel } from './components/Panel'
 import { SettingsDialog } from './components/SettingsDialog'
 import { feedback, keepAwake } from './lib/feedback'
@@ -65,7 +65,12 @@ export default function App() {
     [count],
   )
 
-  // Keyboard: Space / Enter count, Backspace / - / Z undo, M mute.
+  const toggleFocus = useCallback(() => {
+    update((s) => ({ ...s, settings: { ...s.settings, focus: !s.settings.focus } }))
+    setPanelOpen(false)
+  }, [update])
+
+  // Keyboard: Space / Enter count, Backspace / - / Z undo, M mute, F focus mode, Esc leave focus mode.
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return
@@ -79,6 +84,10 @@ export default function App() {
         undo()
       } else if (e.key.toLowerCase() === 'm') {
         update((s) => ({ ...s, settings: { ...s.settings, sound: !s.settings.sound } }))
+      } else if (e.key.toLowerCase() === 'f') {
+        toggleFocus()
+      } else if (e.key === 'Escape' && ref.current.settings.focus) {
+        toggleFocus()
       }
     }
     // Stop Space from also "clicking" whichever button happens to have focus.
@@ -92,7 +101,7 @@ export default function App() {
       window.removeEventListener('keydown', onKeyDown)
       window.removeEventListener('keyup', onKeyUp)
     }
-  }, [count, undo, update])
+  }, [count, undo, update, toggleFocus])
 
   // The wake lock is dropped when the tab is hidden; take it back when returning.
   useEffect(() => {
@@ -111,9 +120,10 @@ export default function App() {
 
   const view = store.getView(state)
   const sound = state.settings.sound
+  const focus = state.settings.focus
 
   return (
-    <div className="app">
+    <div className="app" data-focus={focus || undefined}>
       <main className="stage">
         <header className="topbar">
           <div className="brand">
@@ -135,6 +145,15 @@ export default function App() {
             </button>
             <button className="icon-btn list-toggle" onClick={() => setPanelOpen(true)} aria-label="Open dhikr list">
               <IconList />
+            </button>
+            <button
+              className="icon-btn focus-toggle"
+              onClick={toggleFocus}
+              aria-pressed={focus}
+              aria-label={focus ? 'Show everything' : 'Hide everything except the counter'}
+              title={focus ? 'Show everything (F / Esc)' : 'Focus mode (F)'}
+            >
+              {focus ? <IconEyeOff /> : <IconEye />}
             </button>
           </div>
         </header>
